@@ -1,11 +1,11 @@
-public class info {
+public class Info {
     private String name;
-    private int num;
+    private String num;
 
-    public info() {
+    public Info() {
     }
 
-    public info(String name, int num) {
+    public Info(String name, String num) {
         this.name = name;
         this.num = num;
     }
@@ -18,11 +18,11 @@ public class info {
         this.name = name;
     }
 
-    public int getNum() {
+    public String getNum() {
         return num;
     }
 
-    public void setNum(int num) {
+    public void setNum(String num) {
         this.num = num;
     }
 }
