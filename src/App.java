@@ -93,13 +93,7 @@ public class App {
         while (true) {
             System.out.println("Enter the name: ");
             String nameInput = sc.nextLine();
-//            for (Info contact : contacts) {
-//                if (nameInput.equalsIgnoreCase(contact.getName())) {
-//                    System.out.println("There's already a contact named Jane Doe. Do you want to overwrite it? (Yes/No)");
-//
-//                }
-//            }
-                System.out.println("Enter the Phone number: ");
+            System.out.println("Enter the Phone number: ");
             String numInput = sc.nextLine();
             if (numInput.matches("^\\d{7,10}$") && (numInput.length() == 7 || numInput.length() == 10)) {
                 Files.write(path, List.of(nameInput.toLowerCase()), StandardOpenOption.APPEND);
@@ -110,12 +104,12 @@ public class App {
                     // add to arraylist
                     contactList = Files.readAllLines(path);
                     //System.out.println(contacts.size());//-----
-                    //!!!!!! clear arraylist
+                    //---------!!!!!! clear arraylist!!!!!!!!!!-------
                     contacts.clear();
                     for (int i = 0; i < contactList.size(); i += 2) {
                         contacts.add(new Info(contactList.get(i), contactList.get(i + 1)));
                     }
-                   // System.out.println(contacts.size());//-----
+                    // System.out.println(contacts.size());//-----
                     System.out.println("Back to main page.");
                     run();
                 }
@@ -131,18 +125,9 @@ public class App {
         if (Files.size(path) == 0) {
             System.out.println("No contacts in the file");
         } else {
-            System.out.println("Name       | Phone number |" + "\n---------------------------");
-            for (Info contact : contacts) {
-                if(contact.getNum().length() == 7){
-                    String num = contact.getNum();
-                    String strNum = num.substring(0,3) + "-" + num.substring(3);
-                System.out.println(contact.getName() + " | " + strNum);
-                }else {
-                    String num1 = contact.getNum();
-                    String strNum1 = num1.substring(0,3) + "-" + num1.substring(3,6)+"-"+num1.substring(6);
-                    System.out.println(contact.getName() + " | " + strNum1);
-                }
-            }
+           // System.out.println(contacts.size()+"---1---");
+            formatStr(contacts);
+            //System.out.println(contacts.size()+"---2---");
         }
     }
 
@@ -159,16 +144,15 @@ public class App {
                     if (name.equalsIgnoreCase(contact.getName())) {
                         found = true;
                         System.out.println("Name       | Phone number |" + "\n---------------------------");
-                        if(contact.getNum().length() == 7){
+                        if (contact.getNum().length() == 7) {
                             String num = contact.getNum();
-                            String strNum = num.substring(0,3) + "-" + num.substring(3);
+                            String strNum = num.substring(0, 3) + "-" + num.substring(3);
                             System.out.println(contact.getName() + " | " + strNum);
-                        }else{
+                        } else {
                             String num1 = contact.getNum();
-                            String strNum1 = num1.substring(0,3) + "-" + num1.substring(3,6)+"-"+num1.substring(6);
+                            String strNum1 = num1.substring(0, 3) + "-" + num1.substring(3, 6) + "-" + num1.substring(6);
                             System.out.println(contact.getName() + " | " + strNum1);
                         }
-//                        System.out.println(name + " | " + contact.getNum());
                         System.out.println("Continue? [Y/N]");
                         String command = sc.nextLine();
                         if ("y".equalsIgnoreCase(command)) {
@@ -208,6 +192,34 @@ public class App {
         }
     }
 
+    //format
+    private static void formatStr(ArrayList<Info> contacts) {
+        int phoneWidth = 0;
+        int nameMax = 0;
+        for(Info contact: contacts) {
+            if(contact.getName().length() > nameMax){
+                nameMax = contact.getName().length();
+            }
+        }
+        System.out.println(String.format("%-"+nameMax+"s | %-5s","Name","Phone") + "\n-------------------------");
+        for(Info contact: contacts) {
+//            nameWidth = Math.max(nameWidth, contact.getName().length());
+
+            if(contact.getNum().length() == 7){
+                String num = contact.getNum();
+                String strNum = num.substring(0,3) + "-" + num.substring(3);
+                //nameWidth = Math.max(nameWidth, contact.getName().length());
+                phoneWidth = Math.max(phoneWidth, strNum.length());
+                //String str3 = String.format("|%-10d|", 101); // Left-justifying within the specified width
+                System.out.println(String.format("%-"+nameMax+"s | %-"+phoneWidth+"s", contact.getName(), strNum));
+            }else{
+                String num1 = contact.getNum();
+                String strNum1 = num1.substring(0, 3) + "-" + num1.substring(3, 6) + "-" + num1.substring(6);
+                phoneWidth = Math.max(phoneWidth, strNum1.length());
+                System.out.println(String.format("%-"+nameMax+"s | %-"+phoneWidth+"s", contact.getName(), strNum1));
+            }
+        }
+    }
 }
 
 
